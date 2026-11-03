@@ -1699,6 +1699,64 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .v-fv .fvis .fsteps{left:24px;top:24px}
 .v-fv .fvis[data-area="right"]>.m3d-box{left:40%}
 
+/* ---------- three apps assemble under one platform (pinned while scrolling) ---------- */
+.v-apps-pin{position:relative}
+.v-apps-sticky{position:sticky;top:0;height:100vh;min-height:560px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.v-apps-pin.static{height:auto!important}.v-apps-pin.static .v-apps-sticky{position:relative;height:auto}
+.v-apps-sticky .v-lit{padding-top:clamp(72px,9vh,110px);padding-bottom:clamp(24px,4vh,48px)}
+.v-phone{container-type:inline-size}
+.v-assemble{--k:0;--m:0;grid-template-columns:repeat(3,minmax(0,1fr))!important;border-color:rgba(31,31,31,var(--k))}
+.v-assemble .v-ph{padding-top:clamp(20px,3.6vh,48px);padding-bottom:clamp(20px,3.6vh,48px);border-right-color:rgba(31,31,31,var(--k));border-bottom:0!important}
+.v-assemble .v-phone{width:min(262px,100%,calc((100vh - 330px) * .494))}
+.v-assemble .pm{opacity:var(--k);display:block!important}
+.v-assemble .v-ph:nth-of-type(2){position:relative;z-index:2}
+.v-assemble .v-ph:nth-of-type(1),.v-assemble .v-ph:nth-of-type(3){position:relative;z-index:1;opacity:min(1,calc(var(--k) * 4));will-change:transform}
+.v-assemble .v-ph:nth-of-type(1){transform:translateX(calc((1 - var(--k)) * 100%)) scale(calc(.82 + .18 * var(--k)))}
+.v-assemble .v-ph:nth-of-type(3){transform:translateX(calc((1 - var(--k)) * -100%)) scale(calc(.82 + .18 * var(--k)))}
+.v-assemble .v-ph:nth-of-type(1):hover .v-phone,.v-assemble .v-ph:nth-of-type(3):hover .v-phone{transform:none}
+.v-assemble:not(.done) .v-ph{pointer-events:none}
+/* middle phone: black screen with just the platform line, then it becomes Physio */
+.v-phone-intro{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;background:#000;border-radius:inherit;opacity:calc(1 - var(--m));text-align:center;padding:0 10%}
+.v-phone-intro span{font-size:clamp(12px,9cqw,22px);letter-spacing:-.02em;text-transform:uppercase;color:var(--lime);line-height:1.15}
+.v-phone-intro b{font-weight:600}
+/* phone screens scale with the phone (works for three small phones side by side on mobile too) */
+.v-phone-k{font-size:clamp(7px,4.3cqw,11px)}
+.v-phone-name{font-size:clamp(11px,13cqw,34px);padding:5.5cqw 6cqw}
+.v-phone-logo{width:9cqw;height:9cqw}
+@media (max-width:760px){
+  .v-assemble{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .v-assemble .v-ph{padding-left:4px;padding-right:4px;border-bottom:0!important}
+  .v-assemble .v-ph:nth-of-type(1),.v-assemble .v-ph:nth-of-type(2){border-right:1px solid rgba(31,31,31,var(--k))}
+  .v-assemble .v-phone{border-width:2px;border-radius:20px;padding:3px}.v-assemble .v-phone-scr{border-radius:16px}.v-assemble .v-phone-scr::before{top:5px;height:8px}
+  .v-apps-sticky .v-lit .lit{font-size:clamp(22px,6.4vw,30px)!important}
+}
+.v-apps-sticky .v-lit{padding-top:clamp(96px,12vh,120px)}
+.v-assemble .v-phone{width:min(262px,100%,calc((100vh - 420px) * .494))}
+@media (max-width:760px){.v-assemble .v-phone{width:100%}}
+
+/* privacy padlock: open while the phone comes into view, snaps shut once it's in frame */
+.v-lock{width:64px;top:36%!important;overflow:visible}
+.v-lock .sh{transform:translate(0,-14px) rotate(-14deg);transform-origin:14px 40px;transition:transform .55s cubic-bezier(.5,-0.4,.3,1.6)}
+.v-lock .bd,.v-lock .kh{transform-origin:32px 56px;transition:transform .25s ease}
+.v-lock .kh{opacity:.85}
+.locked .v-lock .sh{transform:none}
+.locked .v-lock .bd{animation:lockSnap .4s ease .45s}
+.v-lockfig{transition:opacity .6s ease .4s}
+.locked .v-lockfig{opacity:.22!important}
+.v-priv-ph::after{content:"";position:absolute;left:50%;top:38%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:2px solid var(--lime);opacity:0;pointer-events:none}
+.v-priv-ph.locked::after{animation:lockRing .8s ease-out .5s}
+@keyframes lockSnap{0%{transform:scale(1)}40%{transform:scale(.94)}100%{transform:scale(1)}}
+@keyframes lockRing{0%{opacity:.8;transform:scale(.5)}100%{opacity:0;transform:scale(1.6)}}
+@media (prefers-reduced-motion:reduce){.v-lock .sh{transition:none}.locked .v-lock .bd,.v-priv-ph.locked::after{animation:none}}
+
+/* compare table: no inner scrolling on desktop, plus marks fully visible */
+.v-tbl{overflow:visible!important}
+.v-tbl-scroll{overflow:visible}
+.v-tbl table{min-width:0}
+.v-tbl .pm.h1,.v-tbl .pm.h2,.v-tbl .pm.h3{top:var(--hy,78px)}
+@media (max-width:860px){.v-tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}.v-tbl table{min-width:760px}.v-tbl .pm{display:none}}
+.v-tbl thead th{border-bottom:1px solid var(--vline)!important;border-top:0!important}.v-tbl tbody tr:last-child th,.v-tbl tbody tr:last-child td{border-bottom:0}
+
 </style>
 </head>
 <body>
@@ -1989,8 +2047,10 @@ tr:last-child th,tr:last-child td{border-bottom:0}
     </div>
     </div></div>
   </div>
-  <div class="v-lit"><p class="lit" data-lit><span class="lime-t">MoveMentor comes in three focused apps,</span> each made for a different reason to move. Pick yours below and see how it works.</p></div>
-  <div class="v-phones"><a class="v-ph" href="#fitness" aria-label="MoveMentor Fitness"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/training.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Fitness<i></i><i></i><i></i><i></i></span></span></span></a><a class="v-ph" href="#physio" aria-label="MoveMentor Physio"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/rehab.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Physio<i></i><i></i><i></i><i></i></span></span></span></a><a class="v-ph" href="#sameeksha" aria-label="MoveMentor Sameeksha"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/clinic.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Sameeksha<i></i><i></i><i></i><i></i></span></span></span></a><svg class="pm t1"><use href="#plus"/></svg><svg class="pm t2"><use href="#plus"/></svg><svg class="pm b1"><use href="#plus"/></svg><svg class="pm b2"><use href="#plus"/></svg></div>
+  <div class="v-apps-pin" id="appsPin"><div class="v-apps-sticky">
+    <div class="v-lit"><p class="lit" id="appsLit"><span class="lime-t">MoveMentor comes in three focused apps,</span> each made for a different reason to move. Pick yours below and see how it works.</p></div>
+    <div class="v-phones v-assemble"><a class="v-ph" href="#fitness" aria-label="MoveMentor Fitness"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/training.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Fitness<i></i><i></i><i></i><i></i></span></span></span></a><a class="v-ph" href="#physio" aria-label="MoveMentor Physio"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/rehab.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Physio<i></i><i></i><i></i><i></i></span><span class="v-phone-intro" aria-hidden="true"><span>The <b>MoveMentor</b> platform</span></span></span></span></a><a class="v-ph" href="#sameeksha" aria-label="MoveMentor Sameeksha"><span class="v-phone"><span class="v-phone-scr"><img src="assets/img/v2/clinic.webp" alt="" loading="lazy"><svg class="v-phone-logo"><use href="#mark"/></svg><span class="v-phone-k">The <b>MoveMentor</b> platform</span><span class="v-phone-name">Sameeksha<i></i><i></i><i></i><i></i></span></span></span></a><svg class="pm t1"><use href="#plus"/></svg><svg class="pm t2"><use href="#plus"/></svg><svg class="pm b1"><use href="#plus"/></svg><svg class="pm b2"><use href="#plus"/></svg></div>
+  </div></div>
 </section>
 
 <!-- ============ FITNESS ============ -->
@@ -2493,7 +2553,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 <!-- ============ COMPARE ============ -->
 <section class="v-sec v-grey" id="compare">
   <div class="v-head"><div><span class="v-label">Side by side</span><h2 class="v-display">Which app is <span class="lime-t">right for you?</span></h2></div></div>
-  <div class="v-tbl"><table>
+  <div class="v-tbl" id="cmpTbl"><div class="v-tbl-scroll"><table>
     <thead><tr><th scope="col"><span class="sr">Compare</span></th><th scope="col">MoveMentor <span class="lime-t">Fitness</span></th><th scope="col">MoveMentor <span class="lime-t">Physio</span></th><th scope="col"><span class="lime-t">Sameeksha</span></th></tr></thead>
     <tbody>
       <tr><th scope="row">Best for</th><td>Training with good form, or running your physio's plan</td><td>Physiotherapists treating patients</td><td>Understanding joint pain before seeking care</td></tr>
@@ -2502,7 +2562,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
       <tr><th scope="row">Medical use</th><td>Fitness and wellness only</td><td>Supports a qualified clinician</td><td>Screening, not diagnosis</td></tr>
       <tr class="span"><th scope="row">Camera analysis</th><td colspan="3">Runs on your device. Live camera video is never uploaded.</td></tr>
     </tbody>
-  </table><svg class="pm t1"><use href="#plus"/></svg><svg class="pm t2"><use href="#plus"/></svg><svg class="pm t3"><use href="#plus"/></svg><svg class="pm h1"><use href="#plus"/></svg><svg class="pm h2"><use href="#plus"/></svg><svg class="pm h3"><use href="#plus"/></svg><svg class="pm b1"><use href="#plus"/></svg></div>
+  </table></div><svg class="pm t1"><use href="#plus"/></svg><svg class="pm t2"><use href="#plus"/></svg><svg class="pm t3"><use href="#plus"/></svg><svg class="pm h1"><use href="#plus"/></svg><svg class="pm h2"><use href="#plus"/></svg><svg class="pm h3"><use href="#plus"/></svg><svg class="pm b1"><use href="#plus"/></svg></div>
 </section>
 
 <!-- ============ SAFETY ============ -->
@@ -2524,7 +2584,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
   <div class="v-priv">
     <div class="v-pi a"><h4>On-device processing</h4><p>Images and video never leave your device.</p></div>
     <div class="v-pi b"><h4>No facial recognition</h4><p>The engine tracks joints, never identity.</p></div>
-    <div class="v-priv-ph"><span class="v-phone sm"><span class="v-phone-scr dark"><span class="v-lockfig" data-m3d="lock"></span><svg class="v-lock" viewBox="0 0 64 80" aria-hidden="true"><path d="M14 34V22a18 18 0 0136 0v12" fill="none" stroke="#fff" stroke-width="7"/><rect x="4" y="34" width="56" height="44" rx="5" fill="#fff"/></svg></span></span></div>
+    <div class="v-priv-ph"><span class="v-phone sm"><span class="v-phone-scr dark"><span class="v-lockfig" data-m3d="lock"></span><svg class="v-lock" viewBox="0 -16 64 96" aria-hidden="true"><path class="sh" d="M14 40V22a18 18 0 0136 0v18" fill="none" stroke="#fff" stroke-width="7"/><rect class="bd" x="4" y="34" width="56" height="44" rx="5" fill="#fff"/><path class="kh" d="M32 48v12" stroke="#000" stroke-width="5" stroke-linecap="round"/></svg></span></span></div>
     <div class="v-pi c"><h4>Never sold, never ads</h4><p>Your data isn't sold or used for advertising.</p></div>
     <div class="v-pi d"><h4>Only results sync</h4><p>Clips are saved or shared only when you choose.</p></div>
     <svg class="pm t1"><use href="#plus"/></svg><svg class="pm t2"><use href="#plus"/></svg><svg class="pm m1"><use href="#plus"/></svg><svg class="pm m2"><use href="#plus"/></svg><svg class="pm b1"><use href="#plus"/></svg><svg class="pm b2"><use href="#plus"/></svg>
@@ -3455,6 +3515,45 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 
+<script>
+/* compare table: plus marks sit exactly on the line under the header row */
+(function(){var t=document.getElementById('cmpTbl');if(!t)return;var th=t.querySelector('thead');function place(){var y=th.offsetHeight;t.style.setProperty('--hy',(y-8)+'px');}place();window.addEventListener('resize',place);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);})();
+</script>
+<script>
+/* privacy phone: the padlock is open until the phone is in view, then it snaps shut */
+(function(){var ph=document.querySelector('.v-priv-ph');if(!ph)return;if(!('IntersectionObserver' in window)){ph.classList.add('locked');return;}
+new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>=.6){setTimeout(function(){ph.classList.add('locked');},350);}else if(!e.isIntersecting){ph.classList.remove('locked');}});},{threshold:[0,.6]}).observe(ph);})();
+</script>
+<script>
+/* three apps: the section holds still while you scroll. The middle phone opens on "The MoveMentor platform";
+   as the first line lights up, Fitness and Sameeksha slide out from behind it and the middle phone becomes Physio. */
+(function(){
+  var pin=document.getElementById('appsPin'),lit=document.getElementById('appsLit');if(!pin||!lit)return;
+  var box=pin.querySelector('.v-assemble');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var words=[];[].forEach.call(lit.childNodes,function(n){var hl=n.nodeType===1&&n.classList.contains('lime-t');(n.textContent||'').trim().split(/\s+/).forEach(function(w){if(w)words.push('<span class="w'+(hl?' hl':'')+'">'+w+'</span>');});});
+  lit.innerHTML=words.join(' ');var ws=[].slice.call(lit.querySelectorAll('.w')),nHl=lit.querySelectorAll('.w.hl').length;
+  function clamp(x){return x<0?0:x>1?1:x;}
+  function ease(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;}
+  if(reduce){pin.classList.add('static');ws.forEach(function(w){w.classList.add('on');});box.style.setProperty('--k',1);box.style.setProperty('--m',1);return;}
+  function size(){pin.style.height=Math.round(window.innerHeight*2.4)+'px';}
+  function update(){
+    var span=pin.offsetHeight-window.innerHeight,top=-pin.getBoundingClientRect().top;
+    var p=span>0?clamp(top/span):0;
+    // words: the lime first line lights over the first third, the rest by 70%
+    var lw=p<.32?Math.round(p/.32*nHl):nHl+Math.round(clamp((p-.32)/.38)*(ws.length-nHl));
+    ws.forEach(function(w,i){w.classList.toggle('on',i<lw);});
+    // side phones come out from behind once the first line is lit
+    var k=ease(clamp((p-.22)/.4)),m=clamp((p-.5)/.22);
+    box.style.setProperty('--k',k.toFixed(3));box.style.setProperty('--m',m.toFixed(3));
+    box.classList.toggle('done',k>.98);
+  }
+  size();update();
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',function(){size();update();});
+})();
+
+</script>
 <script>
 /* v2: feature lists drive the live visual in the middle column; banners and blocks ease in once */
 (function(){
